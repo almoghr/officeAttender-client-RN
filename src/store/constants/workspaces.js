@@ -1,0 +1,1 @@
+export const SET_WORKSPACES = 'SET_WORKSPACES'
