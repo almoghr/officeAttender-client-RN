@@ -117,7 +117,7 @@ const Login = props => {
             id="username"
             label="Username"
             minLength={5}
-            errorText="please enter a valid username!"
+            errorText="Please enter a valid username!"
             keyboardType="default"
             autoCorrect
             autoCapitalize="sentences"
@@ -130,7 +130,7 @@ const Login = props => {
             label="Password"
             minLength={6}
             secureTextEntry
-            errorText="please enter a valid password!"
+            errorText="Please enter a valid password!"
             keyboardType="default"
             autoCorrect
             autoCapitalize="sentences"

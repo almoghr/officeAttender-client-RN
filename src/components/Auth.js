@@ -5,7 +5,7 @@ import AuthScreen from '../screens/AuthScreen';
 import {useDispatch} from 'react-redux';
 import {verifyToken} from '../store/actions/auth';
 
-_storeData = async token => {
+const storeData = async token => {
   try {
     await AsyncStorage.setItem('token', token);
   } catch (error) {
@@ -29,17 +29,21 @@ const checkTokenValidity = async (token, dispatch) => {
         response.data.verifyToken.payload.exp -
           response.data.verifyToken.payload.origIat >
         0;
-      return timeLeft;
+      return timeLeft
+      // return !!response; - this is your purpose?
     } catch (e) {
       console.log(e);
     }
-  }
+  } 
+  // else return false - is this what you meant?
 };
 
 const isAuthenticated = async (dispatch) => {
   const token = await getTokenFromAsyncStorage();
   const isValid = await checkTokenValidity(token, dispatch);
   return token && isValid;
+  // did you meant this:
+  // return await checkTokenValidity(token, dispatch) ?????
 };
 
 const Auth = props => {
@@ -55,7 +59,7 @@ const Auth = props => {
   };
 
   const handleAuthenticated = async (setLoading, setAuthenticated, token) => {
-    _storeData(token);
+    storeData(token);
     props.setToken(token);
     setAuthenticated(true);
     setLoading(false);

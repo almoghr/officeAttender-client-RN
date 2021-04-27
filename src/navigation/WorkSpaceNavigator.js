@@ -40,7 +40,7 @@ const WorkSpaceNavigator = ({route}) => {
             return (
               <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
                 <Item
-                  title="menu"
+                  title="Menu"
                   iconName={platformCheck('android', 'md-menu', 'ios-menu')}
                   onPress={() => {
                     navigation.toggleDrawer();

@@ -30,11 +30,11 @@ const ProfileNavigator = ({route}) => {
           headerRight: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
               <Item
-                title="menu"
+                title="Delete"
                 iconName={platformCheck('android', 'md-trash', 'ios-trash')}
                 onPress={() => {
-                  dispatch(deleteUser(route.params.me.employee.id))
-                  navigation.popToPop();
+                  // dispatch(deleteUser(route.params.me.employee.id))
+                  // navigation.pop();
                 }}
               />
             </HeaderButtons>

@@ -144,7 +144,7 @@ const EditProfileScreen = ({navigation}) => {
             <Input
               id="name"
               label="Name"
-              errorText="please enter a valid name!"
+              errorText="Please enter a valid name!"
               keyboardType="default"
               autoCorrect
               autoCapitalize="sentences"
@@ -157,7 +157,7 @@ const EditProfileScreen = ({navigation}) => {
             <Input
               id="occupation"
               label="Occupation"
-              errorText="please enter a valid occupation!"
+              errorText="Please enter a valid occupation!"
               keyboardType="default"
               onInputChange={inputChangeHandler}
               returnKeyType="next"
@@ -168,7 +168,7 @@ const EditProfileScreen = ({navigation}) => {
             <Input
               id="occupationDescription"
               label="Occupation Description"
-              errorText="please enter a valid description!"
+              errorText="Please enter a valid description!"
               onInputChange={inputChangeHandler}
               keyboardType="default"
               returnKeyType="next"
@@ -179,7 +179,7 @@ const EditProfileScreen = ({navigation}) => {
             <Input
               id="address"
               label="Address"
-              errorText="please enter a valid address!"
+              errorText="Please enter a valid address!"
               onInputChange={inputChangeHandler}
               keyboardType="default"
               autoCorrect
@@ -214,7 +214,7 @@ const EditProfileScreen = ({navigation}) => {
             </View>
             <View></View>
             <Button
-              title={user ? 'Edit' : 'Register'}
+              title={'Edit'}
               onPress={submitHandler}
             />
           </View>

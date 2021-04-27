@@ -38,13 +38,13 @@ const EmployeeExtraDetails = props => {
           </Card>
           <Card style={styles.columnContainer}>
             <View>
-              <Text style={[styles.center, styles.lgSize, styles.bold]}>{status ? `status:  ${status}` : `no status has been chosen for ${name}`}</Text>
+              <Text style={[styles.center, styles.lgSize, styles.bold]}>{status ? `Status:  ${status}` : `No status has been chosen for ${name}`}</Text>
             </View>
           </Card>
           <Card style={styles.columnContainer}>
             <View style={styles.columnContainer}>
               <Text style={[styles.lgSize, styles.bold]}>
-                related to the workspace:
+                Related to the workspace:
               </Text>
             </View>
             <View>

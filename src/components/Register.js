@@ -130,7 +130,7 @@ const Register = props => {
     );
   }
 
-  const workspacesFromProps = props.workspaces.map(workspace => {
+  const workspacesList = props.workspaces.map(workspace => {
     return {
       label: workspace.name,
       value: workspace.id,
@@ -156,7 +156,7 @@ const Register = props => {
               id="username"
               label="Username"
               minLength={4}
-              errorText="please enter a valid username!"
+              errorText="Please enter a valid username!"
               keyboardType="default"
               autoCorrect
               autoCapitalize="sentences"
@@ -169,7 +169,7 @@ const Register = props => {
               label="Password"
               minLength={6}
               secureTextEntry
-              errorText="please enter a valid password!"
+              errorText="Please enter a valid password!"
               keyboardType="default"
               autoCorrect
               autoCapitalize="sentences"
@@ -180,7 +180,7 @@ const Register = props => {
             <Input
               id="email"
               label="E-mail"
-              errorText="please enter a valid email address!"
+              errorText="Please enter a valid email address!"
               keyboardType="email-address"
               autoCorrect
               autoCapitalize="sentences"
@@ -191,7 +191,7 @@ const Register = props => {
             <Input
               id="name"
               label="Name"
-              errorText="please enter a valid name!"
+              errorText="Please enter a valid name!"
               keyboardType="default"
               autoCorrect
               autoCapitalize="sentences"
@@ -203,7 +203,7 @@ const Register = props => {
             <Input
               id="occupation"
               label="Occupation"
-              errorText="please enter a valid occupation!"
+              errorText="Please enter a valid occupation!"
               keyboardType="default"
               onInputChange={inputChangeHandler}
               returnKeyType="next"
@@ -213,7 +213,7 @@ const Register = props => {
             <Input
               id="occupationDescription"
               label="Occupation Description"
-              errorText="please enter a valid description!"
+              errorText="Please enter a valid description!"
               onInputChange={inputChangeHandler}
               keyboardType="default"
               returnKeyType="next"
@@ -223,7 +223,7 @@ const Register = props => {
             <Input
               id="address"
               label="Address"
-              errorText="please enter a valid address!"
+              errorText="Please enter a valid address!"
               onInputChange={inputChangeHandler}
               keyboardType="default"
               autoCorrect
@@ -238,7 +238,7 @@ const Register = props => {
               <View style={styles.dropdownPicker}>
                 <DropDownPicker
                   zIndex={1000}
-                  items={workspacesFromProps}
+                  items={workspacesList}
                   placeholder="Select a workspace"
                   dropDownMaxHeight={150}
                   containerStyle={{height: 40, width: '100%'}}

@@ -29,7 +29,7 @@ const Employee = ({ name, occupation, status, onPress }) => {
           </View>
           <View style={styles.rowTwoContainer}>
             <View style={styles.statusContainer}>
-              <Text style={styles.status}>{status ? `status:  ${status}` : `no status has been chosen for ${name}`}</Text>
+              <Text style={styles.status}>{status ? `Status:  ${status}` : `No status has been chosen for ${name}`}</Text>
             </View>
           </View>
         </Card>

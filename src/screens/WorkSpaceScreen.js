@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-} from 'react-native';
-import { useSelector } from 'react-redux'
+import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {useSelector} from 'react-redux';
 import Employee from '../components/Employee';
 
 const WorkSpaceScreen = ({navigation, route}) => {
@@ -13,7 +8,7 @@ const WorkSpaceScreen = ({navigation, route}) => {
   const workspace = route.params.workspace;
   const WhichWorkSpace = () => {
     if (route.name === 'All-Workspaces') {
-      if(employees){
+      if (employees) {
         const mappedWorkers = employees.map(employee => {
           return (
             <Employee
@@ -33,32 +28,31 @@ const WorkSpaceScreen = ({navigation, route}) => {
         return mappedWorkers;
       }
     } else {
-      if(employees){
-        filteredEmployees = employees.filter(
-          employee => employee.workspace,
-        );
+      if (employees) {
+        filteredEmployees = employees.filter(employee => employee.workspace);
         filteredEmployeesRelatedToWorkspace = filteredEmployees.filter(
           employee =>
             employee.workspace.id === workspace.id || employee.isManagement,
         );
-        const mappedWorkers = filteredEmployeesRelatedToWorkspace.map(employee => {
-          return (
-            <Employee
-              key={employee.id}
-              name={employee.name}
-              occupation={employee.occupation}
-              status={employee.status}
-              onPress={() =>
-                navigation.navigate('SingleUser', {
-                  employee: employee,
-                  workspace: route.params.workspace.name,
-                })
-              }
-            />
-          );
-        });
+        const mappedWorkers = filteredEmployeesRelatedToWorkspace.map(
+          employee => {
+            return (
+              <Employee
+                key={employee.id}
+                name={employee.name}
+                occupation={employee.occupation}
+                status={employee.status}
+                onPress={() =>
+                  navigation.navigate('SingleUser', {
+                    employee: employee,
+                    workspace: route.params.workspace.name,
+                  })
+                }
+              />
+            );
+          },
+        );
         return mappedWorkers;
-
       }
     }
   };
@@ -69,7 +63,7 @@ const WorkSpaceScreen = ({navigation, route}) => {
           <Text style={styles.name}>
             {route.name !== 'All-Workspaces' ? (
               <Text>
-                welcome to <Text style={styles.bold}>{workspace.name}</Text>
+                Welcome to <Text style={styles.bold}>{workspace.name}</Text>
               </Text>
             ) : (
               <Text style={styles.bold}>Management Only</Text>
@@ -90,9 +84,7 @@ const WorkSpaceScreen = ({navigation, route}) => {
         )}
       </View>
       <ScrollView>
-        <View style={styles.listContainer}>
-          {<WhichWorkSpace />}
-        </View>
+        <View style={styles.listContainer}>{<WhichWorkSpace />}</View>
       </ScrollView>
     </View>
   );

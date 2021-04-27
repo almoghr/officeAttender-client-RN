@@ -29,7 +29,7 @@ const MainStackNavigator = () => {
           headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
               <Item
-                title="menu"
+                title="Menu"
                 iconName={platformCheck('android', 'md-menu', 'ios-menu')}
                 onPress={() => {
                   navigation.toggleDrawer();
@@ -47,7 +47,7 @@ const MainStackNavigator = () => {
           headerLeft: () => (
             <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
               <Item
-                title="menu"
+                title="Menu"
                 iconName={platformCheck('android', 'md-menu', 'ios-menu')}
                 onPress={() => {
                   navigation.toggleDrawer();

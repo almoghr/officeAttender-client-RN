@@ -98,7 +98,7 @@ const HomeScreen = () => {
                 <Text style={styles.textLine}>
                   {(me.status && !status) || status
                     ? 'Youre status right now is'
-                    : 'you havent updated youre status yet'}
+                    : 'You havent updated youre status yet'}
                 </Text>
                 <View style={styles.line}>{Checkstatus()}</View>
               </View>
@@ -106,7 +106,7 @@ const HomeScreen = () => {
             <View style={styles.btnContainer}>
               <View style={styles.statusChanger}>
                 <Button
-                  title="change your status"
+                  title="Change your status"
                   onPress={() => setModalVisible(true)}
                 />
               </View>
@@ -148,7 +148,7 @@ const HomeScreen = () => {
                   <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(!modalVisible)}>
-                    <Text style={styles.textStyle}>update</Text>
+                    <Text style={styles.textStyle}>Update</Text>
                   </Pressable>
                 </View>
               </View>
