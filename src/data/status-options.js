@@ -1,0 +1,15 @@
+export const statusList = [
+  {label: 'On my way', value: 'On my way', icon: () => {return}},
+  {label: 'On my way in five', value: 'On my way in five', icon: () => {return}},
+  {label: 'Going home', value: 'Going home', icon: () => {return}},
+  {label: 'Stuck in traffic', value: 'Stuck in traffic', icon: () => {return}},
+  {label: 'At the office', value: 'At the office', icon: () => {return}},
+  {label: 'Sick at home', value: 'Sick at home', icon: () => {return}},
+  {label: 'In a meeting', value: 'In a meeting', icon: () => {return}},
+  {label: 'In a staff meeting', value: 'In a staff meeting', icon: () => {return}},
+  {label: 'In a management meeting', value: 'In a management meeting', icon: () => {return}},
+  {label: 'Coffe break', value: 'Coffee break', icon: () => {return}},
+  {label: 'Lunch time', value: 'Lunch time', icon: () => {return}},
+  {label: 'In a parallel workspace', value: 'In a parallel workspace', icon: () => {return}},
+  {label: 'Working from home', value: 'Working from home', icon: () => {return}},
+];

@@ -1,0 +1,2 @@
+export const SET_EMPLOYEES = "SET_EMPLOYEES"
+export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE"
