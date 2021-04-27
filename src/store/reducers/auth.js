@@ -1,9 +1,9 @@
-import {SET_TOKEN, SET_ME} from '../constants/auth'
+import {SET_TOKEN, SET_PROFILE} from '../constants/auth'
 
 
 const initialState = {
     token: '',
-    me: {}
+    profile: {}
 }
 
 export default (state=initialState, action) => {
@@ -12,8 +12,8 @@ export default (state=initialState, action) => {
     switch(type){
         case SET_TOKEN:
             return {...state, token: payload}
-        case SET_ME:
-            return {...state, me: payload}
+        case SET_PROFILE:
+            return {...state, profile: payload}
         default:
             return state
     }
