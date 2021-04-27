@@ -132,7 +132,7 @@ const EditProfileScreen = ({navigation}) => {
 
   useEffect(() => {
     if (error) {
-      dispatch(setToasterMessage(e.message));
+      dispatch(setToasterMessage('an error occured while trying to edit profile'));
     }
   }, []);
 

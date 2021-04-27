@@ -118,7 +118,7 @@ const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
 
   useEffect(() => {
     if (error) {
-      dispatch(setToasterMessage(e.message));
+      dispatch(setToasterMessage('an error occured while trying to register'));
     }
   }, []);
 

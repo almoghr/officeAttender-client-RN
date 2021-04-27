@@ -14,7 +14,7 @@ const storeData = async token => {
   try {
     await AsyncStorage.setItem('token', token);
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to set data to the Async Storage'));
   }
 };
 
@@ -22,7 +22,7 @@ const getTokenFromAsyncStorage = async () => {
   try {
     return await AsyncStorage.getItem('token');
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while fetching data from the Async Storage'));
   }
 };
 
@@ -36,7 +36,7 @@ const checkTokenValidity = async (token, dispatch) => {
         0
       );
     } catch (e) {
-      dispatch(setToasterMessage(e.message));
+      dispatch(setToasterMessage('an error occured while trying to check the token validity'));
     }
   }
 };

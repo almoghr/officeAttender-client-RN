@@ -12,7 +12,7 @@ export const setToken = token => async dispatch => {
       dispatch({type: SET_TOKEN, payload: token}),
     );
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to set the token'));
   }
 };
 
@@ -22,7 +22,7 @@ export const setProfile = () => async dispatch => {
     dispatch({type: SET_PROFILE, payload: result.data.profile.employee});
     return result.data.profile.employee;
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to set profile'));
   }
 };
 
@@ -30,7 +30,7 @@ export const updateProfile = profile => async dispatch => {
   try {
     dispatch({type: SET_PROFILE, payload: profile});
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to update profile'));
   }
 };
 
@@ -43,7 +43,7 @@ export const signIn = (username, password) => async () => {
     setToken(result.data.tokenAuth.token);
     return result.data.tokenAuth.token;
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to login'));
   }
 };
 
@@ -77,7 +77,7 @@ export const register = (
     setProfile(result.data.createEmployee.employee);
     return result.data.createEmployee.token;
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to register'));
   }
 };
 
@@ -89,6 +89,6 @@ export const verifyToken = token => async () => {
     });
     return result;
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to verify the token'));
   }
 };

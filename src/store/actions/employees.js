@@ -33,7 +33,7 @@ export const updateEmployee = (
     });
     updateProfile(result.data.updateEmployee.employee);
   } catch (e) {
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to update profile'));
   }
 };
 
@@ -42,7 +42,7 @@ export const setAllEmployees = () => async dispatch => {
         const result = await client.query({query:GET_ALL_EMPLOYEES})
         dispatch({type: SET_EMPLOYEES, payload: result.data.employees})
     } catch(e){
-      dispatch(setToasterMessage(e.message));
+      dispatch(setToasterMessage('an error occured while trying to set employees'));
     }
 }
 
@@ -52,6 +52,6 @@ export const deleteEmployee = (employeeId) => async dispatch => {
     await dispatch({type: DELETE_EMPLOYEE, payload: {employeeId}})
     setAllEmployees()
   } catch(e){
-    dispatch(setToasterMessage(e.message));
+    dispatch(setToasterMessage('an error occured while trying to delete employee'));
   }
 }

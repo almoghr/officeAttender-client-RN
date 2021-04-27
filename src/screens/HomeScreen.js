@@ -64,7 +64,7 @@ const HomeScreen = () => {
       dispatch(setToasterMessage('updated Successfully'));
       setUpdateClicked(true);
     } catch (e) {
-      dispatch(setToasterMessage(e.message));
+      dispatch(setToasterMessage('an error occured while trying to update status'));
     }
   };
 

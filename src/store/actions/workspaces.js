@@ -9,6 +9,6 @@ export const setAllWorkspaces = () => async dispatch => {
     try{
         client.query({query: GET_ALL_WORKSPACES}).then(result => dispatch({type: SET_WORKSPACES, payload: result.data.workspaces}))
     } catch(e){
-        dispatch(setToasterMessage(e.message));
+        dispatch(setToasterMessage('an error occured while trying to set all workspaces'));
     }
 }
