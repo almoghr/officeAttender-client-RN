@@ -2,11 +2,14 @@ import React from 'react';
 import EditProfileScreen from '../screens/EditProfileScreen';
 import {createStackNavigator} from '@react-navigation/stack';
 import Colors from '../constants/color';
+import CustomHeaderButton from '../components/CustomHeaderButton';
+import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import platformCheck from '../helpers/platformCheck'
-
+import { useDispatch } from 'react-redux'
 const Stack = createStackNavigator();
 
 const ProfileNavigator = ({route}) => {
+  const dispatch = useDispatch()
   return (
     <Stack.Navigator
       screenOptions={{
@@ -22,7 +25,22 @@ const ProfileNavigator = ({route}) => {
         name="EditProfile"
         component={EditProfileScreen}
         initialParams={{me: route.params.me.employee, workspaces: route.params.workspaces}}
-        options={() => ({title: 'Edit Profile'})}
+        options={() => ({
+          title: 'Edit Profile',
+          headerRight: () => (
+            <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+              <Item
+                title="menu"
+                iconName={platformCheck('android', 'md-trash', 'ios-trash')}
+                onPress={() => {
+                  dispatch(deleteUser(route.params.me.employee.id))
+                  navigation.popToPop();
+                }}
+              />
+            </HeaderButtons>
+          ),
+
+        })}
       />
     </Stack.Navigator>
   );  
