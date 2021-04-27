@@ -6,7 +6,7 @@ import CustomHeaderButton from '../components/CustomHeaderButton';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
 import SingleUserScreen from '../screens/SingleUserScreen';
 import platformCheck from '../helpers/platformCheck';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {setAllEmployees} from '../store/actions/employees';
 
 const Stack = createStackNavigator();

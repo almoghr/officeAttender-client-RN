@@ -24,7 +24,7 @@ const ProfileNavigator = ({route}) => {
       <Stack.Screen
         name="EditProfile"
         component={EditProfileScreen}
-        initialParams={{me: route.params.me.employee, workspaces: route.params.workspaces}}
+        initialParams={{profile: route.params.profile.employee, workspaces: route.params.workspaces}}
         options={() => ({
           title: 'Edit Profile',
           headerRight: () => (
@@ -33,7 +33,7 @@ const ProfileNavigator = ({route}) => {
                 title="Delete"
                 iconName={platformCheck('android', 'md-trash', 'ios-trash')}
                 onPress={() => {
-                  // dispatch(deleteUser(route.params.me.employee.id))
+                  // dispatch(deleteUser(route.params.profile.employee.id))
                   // navigation.pop();
                 }}
               />

@@ -5,7 +5,6 @@ import {
   View,
   Text,
   Pressable,
-  Alert,
   ScrollView,
   RefreshControl,
 } from 'react-native';
@@ -14,33 +13,34 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {statusList} from '../data/status-options';
 import CustomModal from '../components/CustomModal';
 import {useDispatch, useSelector} from 'react-redux';
-import {setMe} from '../store/actions/auth';
+import {setProfile} from '../store/actions/auth';
 import {updateEmployee} from '../store/actions/employees';
+import {WAITING_PERIOD} from '../constants/variables';
+import {setToasterMessage} from '../store/actions/toaster';
+
 const wait = timeout => {
   return new Promise(resolve => setTimeout(resolve, timeout));
 };
 
 const HomeScreen = () => {
-  const me = useSelector(state => state.auth.me);
+  const profile = useSelector(state => state.auth.profile);
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
   const [status, setStatus] = useState();
   const [refreshing, setRefreshing] = useState(false);
+  const [updateClicked, setUpdateClicked] = useState(false);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    dispatch(setMe());
-    wait(500).then(() => setRefreshing(false));
+    dispatch(setProfile());
+    wait(WAITING_PERIOD).then(() => setRefreshing(false));
   }, []);
 
   const Checkstatus = () => {
+    const status = status ? status : profile.status;
     if (status) {
       return (
         <Text style={[styles.textBoldLine, styles.textLine]}>{status}</Text>
-      );
-    } else if (me.status && !status) {
-      return (
-        <Text style={[styles.textBoldLine, styles.textLine]}>{me.status}</Text>
       );
     } else {
       return null;
@@ -51,23 +51,25 @@ const HomeScreen = () => {
     try {
       dispatch(
         updateEmployee(
-          Number(me.id),
-          me.name,
-          me.occupation,
-          me.occupationDescription,
+          Number(profile.id),
+          profile.name,
+          profile.occupation,
+          profile.occupationDescription,
           status[0],
-          me.address,
-          me.isManagement,
-          Number(me.workspace.id),
+          profile.address,
+          profile.isManagement,
+          Number(profile.workspace.id),
         ),
       );
-      Alert.alert('Updated Successfully', '', [{text: 'Okay'}]);
+      dispatch(setToasterMessage('updated Successfully'));
+      setUpdateClicked(true);
     } catch (e) {
-      console.log(e.message);
+      dispatch(setToasterMessage(e.message));
     }
   };
+
   return (
-    me && (
+    profile && (
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -77,26 +79,27 @@ const HomeScreen = () => {
             <View>
               <View style={styles.line}>
                 <Text style={styles.textLine}>
-                  Welcome <Text style={styles.textBoldLine}>{me.name}</Text>
+                  Welcome{' '}
+                  <Text style={styles.textBoldLine}>{profile.name}</Text>
                 </Text>
               </View>
               <View style={styles.line}>
                 <Text style={styles.textLine}>
-                  {me.workspace
+                  {profile.workspace
                     ? 'You are assigned to the'
                     : 'You are not assigned to any workspace yet'}
                 </Text>
                 <View style={styles.line}>
                   <View style={styles.workspaceChoosingContainer}>
                     <Text style={[styles.textBoldLine, styles.textLine]}>
-                      {me?.workspace?.name || undefined}
+                      {profile?.workspace?.name || undefined}
                     </Text>
                   </View>
                 </View>
               </View>
               <View style={styles.line}>
                 <Text style={styles.textLine}>
-                  {(me.status && !status) || status
+                  {(profile.status && !status) || status
                     ? 'Youre status right now is'
                     : 'You havent updated youre status yet'}
                 </Text>
@@ -111,7 +114,13 @@ const HomeScreen = () => {
                 />
               </View>
               <View style={styles.workspaceChanger}>
-                <Button title="UPDATE" onPress={updateEmployeeHandler} />
+                <Button
+                  title="UPDATE"
+                  disabled={
+                    profile.status === status || !status || updateClicked
+                  }
+                  onPress={updateEmployeeHandler}
+                />
               </View>
             </View>
           </View>
@@ -141,7 +150,10 @@ const HomeScreen = () => {
                           backgroundColor: '#fafafa',
                           height: 600,
                         }}
-                        onChangeItem={item => setStatus([item.value])}
+                        onChangeItem={item => {
+                          setStatus([item.value]);
+                          profile.status !== item.value ? setUpdateClicked(false) : setUpdateClicked(true)
+                        }}
                       />
                     </View>
                   </View>

@@ -1,8 +1,7 @@
 import React from 'react';
 import {StyleSheet, View, Modal} from 'react-native';
 
-const CustomModal = props => {
-  const {modalVisible, setModalVisible} = props;
+const CustomModal = ({modalVisible, setModalVisible, children}) => {
 
   return (
     <View style={styles.centeredView}>
@@ -13,7 +12,7 @@ const CustomModal = props => {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        {props.children}
+        {children}
       </Modal>
     </View>
   );

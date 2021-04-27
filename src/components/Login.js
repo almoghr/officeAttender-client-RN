@@ -11,11 +11,12 @@ import {
 } from 'react-native';
 import Input from '../components/Input';
 import Colors from '../constants/color';
-import {useDispatch} from 'react-redux'
+import {useDispatch} from 'react-redux';
+import {setLoading} from '../store/actions/loading'
 import {signIn} from '../store/actions/auth'
-import LoadingSpinner from './LoadingSpinner'
-const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
+import {setToasterMessage} from '../store/actions/toaster'
 
+const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
 const formReducer = (state, action) => {
   if (action.type === FORM_INPUT_UPDATE) {
@@ -40,10 +41,8 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const Login = props => {
+const Login = ({setIsLoginComponent, onAuthenticated}) => {
   const dispatch = useDispatch()
-  const {setIsLogin} = props;
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -66,10 +65,10 @@ const Login = props => {
       return;
     }
     setError(null);
-    setIsLoading(true);
+    dispatch(setLoading(true))
     try {
       const token = await dispatch(signIn(formState.inputValues.username, formState.inputValues.password))
-      props.onAuthenticated(token);
+      onAuthenticated(token);
       
     } catch (err) {
       setError(err.message);
@@ -92,15 +91,10 @@ const Login = props => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert('An error occured', error, [{text: 'Okay'}]);
+      dispatch(setToasterMessage(e.message));
     }
-  }, []);
+  }, [error]);
 
-  if (isLoading) {
-    return (
-      <LoadingSpinner />
-    );
-  }
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -142,7 +136,7 @@ const Login = props => {
             <Button title="SUBMIT" onPress={submitHandler} />
             <Button
               title="Register instead"
-              onPress={() => setIsLogin(false)}
+              onPress={() => setIsLoginComponent(false)}
             />
           </View>
         </View>

@@ -1,9 +1,9 @@
 import {gqlClient} from '../../graphql/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {SET_TOKEN, SET_ME} from '../constants/auth';
-import {ME} from '../../graphql/queries';
+import {SET_TOKEN, SET_PROFILE} from '../constants/auth';
+import {PROFILE} from '../../graphql/queries';
 import {LOGIN, REGISTER, AUTHENTICATE_TOKEN} from '../../graphql/mutation';
-
+import {setToasterMessage} from './toaster'
 const client = gqlClient();
 
 export const setToken = token => async dispatch => {
@@ -12,25 +12,25 @@ export const setToken = token => async dispatch => {
       dispatch({type: SET_TOKEN, payload: token}),
     );
   } catch (e) {
-    console.log(e);
+    dispatch(setToasterMessage(e.message));
   }
 };
 
-export const setMe = () => async dispatch => {
+export const setProfile = () => async dispatch => {
   try {
-    const result = await client.query({query: ME});
-    dispatch({type: SET_ME, payload: result.data.me.employee});
-    return result.data.me.employee;
+    const result = await client.query({query: PROFILE});
+    dispatch({type: SET_PROFILE, payload: result.data.profile.employee});
+    return result.data.profile.employee;
   } catch (e) {
-    console.log(e);
+    dispatch(setToasterMessage(e.message));
   }
 };
 
-export const updateMe = me => async dispatch => {
+export const updateProfile = profile => async dispatch => {
   try {
-    dispatch({type: SET_ME, payload: me});
+    dispatch({type: SET_PROFILE, payload: profile});
   } catch (e) {
-    console.log(e);
+    dispatch(setToasterMessage(e.message));
   }
 };
 
@@ -43,7 +43,7 @@ export const signIn = (username, password) => async () => {
     setToken(result.data.tokenAuth.token);
     return result.data.tokenAuth.token;
   } catch (e) {
-    console.log(e);
+    dispatch(setToasterMessage(e.message));
   }
 };
 
@@ -73,11 +73,11 @@ export const register = (
         workspaceId,
       },
     });
-    await setToken(result.data.createEmployee.token);
-    await setMe(result.data.createEmployee.employee);
+    setToken(result.data.createEmployee.token);
+    setProfile(result.data.createEmployee.employee);
     return result.data.createEmployee.token;
   } catch (e) {
-    console.log(e.message);
+    dispatch(setToasterMessage(e.message));
   }
 };
 
@@ -89,6 +89,6 @@ export const verifyToken = token => async () => {
     });
     return result;
   } catch (e) {
-    console.log(e);
+    dispatch(setToasterMessage(e.message));
   }
 };

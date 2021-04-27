@@ -10,14 +10,14 @@ import {
   Button,
   Text,
 } from 'react-native';
-import LoadingSpinner from './LoadingSpinner';
-
 import {useDispatch} from 'react-redux';
+import {setLoading} from '../store/actions/loading'
 import Input from '../components/Input';
 import Colors from '../constants/color';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {register} from '../store/actions/auth';
 import platformCheck from '../helpers/platformCheck';
+import {setToasterMessage} from '../store/actions/toaster'
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -44,10 +44,8 @@ const formReducer = (state, action) => {
   return state;
 };
 
-const Register = props => {
+const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
   const dispatch = useDispatch();
-  const {setIsLogin} = props;
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
@@ -84,7 +82,7 @@ const Register = props => {
       return;
     }
     setError(null);
-    setIsLoading(true);
+    dispatch(setLoading(true))
     try {
       const token = await dispatch(
         register(
@@ -99,7 +97,7 @@ const Register = props => {
           Number(formState.inputValues.workspaceId),
         ),
       );
-      props.onAuthenticated(token);
+      onAuthenticated(token);
       
     } catch (err) {
       setError(err.message);
@@ -120,17 +118,12 @@ const Register = props => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert('An error occured', error, [{text: 'Okay'}]);
+      dispatch(setToasterMessage(e.message));
     }
   }, []);
 
-  if (isLoading) {
-    return (
-      <LoadingSpinner />
-    );
-  }
 
-  const workspacesList = props.workspaces.map(workspace => {
+  const workspacesList = workspaces.map(workspace => {
     return {
       label: workspace.name,
       value: workspace.id,
@@ -256,7 +249,7 @@ const Register = props => {
             </View>
             <View style={styles.buttonContainer}>
               <Button title="SUBMIT" onPress={submitHandler} />
-              <Button title="Login instead" onPress={() => setIsLogin(true)} />
+              <Button title="Login instead" onPress={() => setIsLoginComponent(true)} />
             </View>
           </View>
         </KeyboardAvoidingView>

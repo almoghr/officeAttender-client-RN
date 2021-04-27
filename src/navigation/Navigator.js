@@ -1,33 +1,29 @@
-import React, {useState, useEffect} from 'react';
-import LoadingSpinner from '../components/LoadingSpinner';
+import React, {useEffect} from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import WorkSpaceNavigator from '../navigation/WorkSpaceNavigator';
 import TabNavigator from './TabNavigator';
-import {setMe} from '../store/actions/auth';
-import {setAllWorkspaces} from '../store/actions/workspaces'
-import {useSelector, useDispatch} from 'react-redux';
+import {setProfile} from '../store/actions/auth';
+import {setAllWorkspaces} from '../store/actions/workspaces';
+import {useDispatch, useSelector} from 'react-redux';
+import {setLoading} from '../store/actions/loading';
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const me = useSelector(state => state.auth.me);
+  const loading = useSelector(state => state.loading.loading)
+  const profile = useSelector(state => state.auth.profile);
   const workspaces = useSelector(state => state.workspaces.workspaces);
 
   useEffect(() => {
-    setLoading(true);
-    dispatch(setMe());
-    dispatch(setAllWorkspaces())
-    if(me && workspaces){
-      setLoading(false);
+    dispatch(setLoading(true));
+    dispatch(setProfile());
+    dispatch(setAllWorkspaces());
+    if (profile && workspaces) {
+      dispatch(setLoading(false));
     }
-  }, [loading, me, workspaces]);
+  }, [loading, profile, workspaces]);
 
-
-  if (loading) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <Drawer.Navigator initialRouteName="Home">
@@ -35,13 +31,11 @@ const DrawerNavigator = () => {
         name="Home"
         component={TabNavigator}
         options={() => ({title: 'Homepage'})}
-        initialParams={{me, workspaces}}
+        initialParams={{profile, workspaces}}
       />
-      {me && workspaces.map(workspace => {
-          if (
-            (workspace.id === me?.workspace?.id) ||
-            me.isManagement
-          ) {
+      {profile &&
+        workspaces.map(workspace => {
+          if (workspace.id === profile?.workspace?.id || profile.isManagement) {
             return (
               <Drawer.Screen
                 key={workspace.id}
@@ -52,7 +46,7 @@ const DrawerNavigator = () => {
             );
           }
         })}
-      {me && me.isManagement && (
+      {profile && profile.isManagement && (
         <Drawer.Screen
           name="All-Workspaces"
           component={WorkSpaceNavigator}
