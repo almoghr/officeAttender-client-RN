@@ -2,7 +2,8 @@ import {gqlClient} from '../../graphql/client';
 import {UPDATE_EMPLOYEE, DELETE_AN_EMPLOYEE} from '../../graphql/mutation';
 import {GET_ALL_EMPLOYEES} from '../../graphql/queries'
 import {SET_EMPLOYEES, DELETE_EMPLOYEE} from '../constants/employees';
-import {updateMe} from './auth';
+import {updateProfile} from './auth';
+import {setToasterMessage} from './toaster'
 
 const client = gqlClient();
 
@@ -30,9 +31,9 @@ export const updateEmployee = (
         workspaceId,
       },
     });
-    updateMe(result.data.updateEmployee.employee);
+    updateProfile(result.data.updateEmployee.employee);
   } catch (e) {
-    console.log(e);
+    dispatch(setToasterMessage('an error occured while trying to update profile'));
   }
 };
 
@@ -41,7 +42,7 @@ export const setAllEmployees = () => async dispatch => {
         const result = await client.query({query:GET_ALL_EMPLOYEES})
         dispatch({type: SET_EMPLOYEES, payload: result.data.employees})
     } catch(e){
-        console.log(e)
+      dispatch(setToasterMessage('an error occured while trying to set employees'));
     }
 }
 
@@ -51,6 +52,6 @@ export const deleteEmployee = (employeeId) => async dispatch => {
     await dispatch({type: DELETE_EMPLOYEE, payload: {employeeId}})
     setAllEmployees()
   } catch(e){
-    console.log(e)
+    dispatch(setToasterMessage('an error occured while trying to delete employee'));
   }
 }

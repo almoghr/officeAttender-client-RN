@@ -12,9 +12,10 @@ import {
 } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Input from '../components/Input';
-import LoadingSpinner from '../components/LoadingSpinner';
 import {useDispatch, useSelector} from 'react-redux';
 import {updateEmployee} from '../store/actions/employees';
+import {setLoading} from '../store/actions/loading';
+import {setToasterMessage} from '../store/actions/toaster';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -44,20 +45,19 @@ const formReducer = (state, action) => {
 const EditProfileScreen = ({navigation}) => {
   const dispatch = useDispatch();
   const workspaces = useSelector(state => state.workspaces.workspaces);
-  const user = useSelector(state => state.auth.me);
-  const [isLoading, setIsLoading] = useState(false);
+  const profile = useSelector(state => state.auth.profile);
   const [error, setError] = useState();
   const [workspace, setWorkspace] = useState();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
     inputValues: {
-      name: user.name,
-      occupation: user.occupation,
-      occupationDescription: user.occupationDescription,
-      status: user.status,
-      address: user.address,
+      name: profile.name,
+      occupation: profile.occupation,
+      occupationDescription: profile.occupationDescription,
+      status: profile.status,
+      address: profile.address,
       isManagement: false,
-      workspaceId: Number(user.workspace.id),
+      workspaceId: Number(profile.workspace.id),
     },
     inputValidities: {
       name: true,
@@ -70,7 +70,17 @@ const EditProfileScreen = ({navigation}) => {
     },
     formIsValid: true,
   });
-
+  const formChecker = (formState) => {
+    if (
+      profile.name === formState.inputValues.name &&
+      profile.occupation === formState.inputValues.occupation &&
+      profile.occupationDescription === formState.inputValues.occupationDescription && 
+      profile.address === formState.inputValues.address &&
+      Number(profile.workspace.id) === (Number(formState.inputValues.workspaceId) || Number(workspace.item) || Number(profile.workspace.id))
+    ) {
+      return false
+    } else return true
+  };
   const submitHandler = useCallback(async () => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong input', 'Please check the errors in the form', [
@@ -79,11 +89,17 @@ const EditProfileScreen = ({navigation}) => {
       return;
     }
     setError(null);
-    setIsLoading(true);
+    dispatch(setLoading(true));
+    const formIntegrityCheck = formChecker(formState)
+
+    if (!formIntegrityCheck) {
+      dispatch(setToasterMessage('nothing changed'))
+      navigation.goBack();
+    }
     try {
       dispatch(
         updateEmployee(
-          Number(user.id),
+          Number(profile.id),
           formState.inputValues.name,
           formState.inputValues.occupation,
           formState.inputValues.occupationDescription,
@@ -92,14 +108,14 @@ const EditProfileScreen = ({navigation}) => {
           formState.inputValues.isManagement,
           formState.inputValues.workspaceId ||
             workspace.item ||
-            user.workspace.id,
+            profile.workspace.id,
         ),
       );
+      dispatch(setLoading(false));
       navigation.goBack();
     } catch (err) {
       setError(err.message);
     }
-    setIsLoading(false);
   }, [formState]);
 
   const inputChangeHandler = useCallback(
@@ -116,12 +132,10 @@ const EditProfileScreen = ({navigation}) => {
 
   useEffect(() => {
     if (error) {
-      Alert.alert('An error occured', error, [{text: 'Okay'}]);
+      dispatch(setToasterMessage('an error occured while trying to edit profile'));
     }
   }, []);
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+
   const mappedWorkspaces = workspaces.map(workspace => {
     return {
       label: workspace.name,
@@ -150,8 +164,8 @@ const EditProfileScreen = ({navigation}) => {
               autoCapitalize="sentences"
               returnKeyType="next"
               onInputChange={inputChangeHandler}
-              initialValue={user ? user.name : ''}
-              initiallyValid={!!user}
+              initialValue={profile ? profile.name : ''}
+              initiallyValid={!!profile}
               required
             />
             <Input
@@ -161,8 +175,8 @@ const EditProfileScreen = ({navigation}) => {
               keyboardType="default"
               onInputChange={inputChangeHandler}
               returnKeyType="next"
-              initialValue={user ? user.occupation : ''}
-              initiallyValid={!!user}
+              initialValue={profile ? profile.occupation : ''}
+              initiallyValid={!!profile}
               required
             />
             <Input
@@ -172,8 +186,8 @@ const EditProfileScreen = ({navigation}) => {
               onInputChange={inputChangeHandler}
               keyboardType="default"
               returnKeyType="next"
-              initialValue={user ? user.occupationDescription : ''}
-              initiallyValid={!!user}
+              initialValue={profile ? profile.occupationDescription : ''}
+              initiallyValid={!!profile}
               required
             />
             <Input
@@ -186,8 +200,8 @@ const EditProfileScreen = ({navigation}) => {
               autoCapitalize="sentences"
               multiline
               numberOfLines={2}
-              initialValue={user ? user.address : ''}
-              initiallyValid={!!user}
+              initialValue={profile ? profile.address : ''}
+              initiallyValid={!!profile}
               required
             />
           </View>
@@ -213,10 +227,7 @@ const EditProfileScreen = ({navigation}) => {
               />
             </View>
             <View></View>
-            <Button
-              title={'Edit'}
-              onPress={submitHandler}
-            />
+            <Button title={'Edit'} onPress={submitHandler} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>

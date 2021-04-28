@@ -37,7 +37,7 @@ const TabNavigator = ({route}) => {
         name="Profile"
         component={ProfileNavigator}
         options={() => ({title: 'ME'})}
-        initialParams={{me: route.params.me, workspaces: route.params.workspaces}}
+        initialParams={{profile: route.params.profile, workspaces: route.params.workspaces}}
       />
     </Tab.Navigator>
   );

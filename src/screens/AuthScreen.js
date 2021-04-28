@@ -4,28 +4,24 @@ import Register from '../components/Register';
 import {useDispatch, useSelector} from 'react-redux'
 import {setAllWorkspaces} from '../store/actions/workspaces'
 
-const AuthScreen = props => {
+const AuthScreen = (props) => {
   
   const dispatch = useDispatch();
   dispatch(setAllWorkspaces())
   const workspaces = useSelector(state => state.workspaces.workspaces)
-  const [isLogin, setIsLogin] = useState(true);
-  
-  const isLoginSubmitted = false;
-  const isRegisterSubmitted = false;
-
+  const [isLoginComponent, setIsLoginComponent] = useState(true);
   const onAuthenticated = token => {
     props.onAuthenticated(token);
   };
   
 
 
-  if (isLogin && !isLoginSubmitted) {
-    return <Login setIsLogin={setIsLogin} onAuthenticated={onAuthenticated} />;
-  } else if (!isLogin && !isRegisterSubmitted) {
+  if (isLoginComponent) {
+    return <Login setIsLoginComponent={setIsLoginComponent} onAuthenticated={onAuthenticated} />;
+  } else if (!isLoginComponent) {
     return (
       <Register
-        setIsLogin={setIsLogin}
+      setIsLoginComponent={setIsLoginComponent}
         onAuthenticated={onAuthenticated}
         workspaces={workspaces}
       />
