@@ -16,7 +16,7 @@ export const updateEmployee = (
   address,
   isManagement = false,
   workspaceId,
-) => async () => {
+) => async dispatch => {
   try {
     const result = await client.mutate({
       mutation: UPDATE_EMPLOYEE,

@@ -11,13 +11,13 @@ import {
   Text,
 } from 'react-native';
 import {useDispatch} from 'react-redux';
-import {setLoading} from '../store/actions/loading'
+import {setLoading} from '../store/actions/loading';
 import Input from '../components/Input';
 import Colors from '../constants/color';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {register} from '../store/actions/auth';
 import platformCheck from '../helpers/platformCheck';
-import {setToasterMessage} from '../store/actions/toaster'
+import {setToasterMessage} from '../store/actions/toaster';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -49,7 +49,7 @@ const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
   const [error, setError] = useState();
 
   const [formState, dispatchFormState] = useReducer(formReducer, {
-    inputValues: {  
+    inputValues: {
       username: '',
       password: '',
       email: '',
@@ -75,15 +75,20 @@ const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
   });
 
   const submitHandler = useCallback(async () => {
+    console.log('got into submit fn');
     if (!formState.formIsValid) {
       Alert.alert('Wrong input', 'Please check the errors in the form', [
         {text: 'Okay'},
       ]);
       return;
     }
+
+    console.log('all is valid');
     setError(null);
-    dispatch(setLoading(true))
+    dispatch(setLoading(true));
+    console.log('going there')
     try {
+      console.log('dispatching register')
       const token = await dispatch(
         register(
           formState.inputValues.username,
@@ -97,10 +102,12 @@ const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
           Number(formState.inputValues.workspaceId),
         ),
       );
+      console.log('got here');
       onAuthenticated(token);
-      
     } catch (err) {
-      setError(err.message);
+      setLoading(false);
+      console.log(err.message);
+      dispatch(setToasterMessage('an error occured while trying to login'));
     }
   }, [formState]);
 
@@ -121,7 +128,6 @@ const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
       dispatch(setToasterMessage('an error occured while trying to register'));
     }
   }, []);
-
 
   const workspacesList = workspaces.map(workspace => {
     return {
@@ -249,7 +255,10 @@ const Register = ({setIsLoginComponent, onAuthenticated, workspaces}) => {
             </View>
             <View style={styles.buttonContainer}>
               <Button title="SUBMIT" onPress={submitHandler} />
-              <Button title="Login instead" onPress={() => setIsLoginComponent(true)} />
+              <Button
+                title="Login instead"
+                onPress={() => setIsLoginComponent(true)}
+              />
             </View>
           </View>
         </KeyboardAvoidingView>

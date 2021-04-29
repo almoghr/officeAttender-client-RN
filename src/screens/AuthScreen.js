@@ -10,6 +10,7 @@ const AuthScreen = (props) => {
   dispatch(setAllWorkspaces())
   const workspaces = useSelector(state => state.workspaces.workspaces)
   const [isLoginComponent, setIsLoginComponent] = useState(true);
+
   const onAuthenticated = token => {
     props.onAuthenticated(token);
   };

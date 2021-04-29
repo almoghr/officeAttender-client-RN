@@ -11,8 +11,10 @@ export default (state=initialState, action) => {
 
     switch(type){
         case SET_TOKEN:
+            console.log(payload)
             return {...state, token: payload}
         case SET_PROFILE:
+            console.log(payload)
             return {...state, profile: payload}
         default:
             return state

@@ -11,8 +11,8 @@ import {gqlClient} from './src/graphql/client';
 
 const App = () => {
   const [token, setToken] = useState();
+  console.log('1st', token)
   const client = gqlClient(token);
-
   return (
     <ApolloProvider client={client}>
       <Provider store={store}>

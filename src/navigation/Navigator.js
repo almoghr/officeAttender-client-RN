@@ -17,6 +17,7 @@ const DrawerNavigator = () => {
 
   useEffect(() => {
     dispatch(setLoading(true));
+    console.log('3rd')
     dispatch(setProfile());
     dispatch(setAllWorkspaces());
     if (profile && workspaces) {

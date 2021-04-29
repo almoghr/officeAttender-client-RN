@@ -71,7 +71,7 @@ const Login = ({setIsLoginComponent, onAuthenticated}) => {
       onAuthenticated(token);
       
     } catch (err) {
-      setError(err.message);
+      dispatch(setToasterMessage('an error occured while trying to login'));
     }
   }, [formState]);
   

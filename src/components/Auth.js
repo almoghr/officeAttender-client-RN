@@ -10,8 +10,9 @@ import {setToasterMessage} from '../store/actions/toaster'
 
 
 
-const storeData = async token => {
+const storeData = async (token, dispatch) => {
   try {
+    console.log(token)
     await AsyncStorage.setItem('token', token);
   } catch (e) {
     dispatch(setToasterMessage('an error occured while trying to set data to the Async Storage'));
@@ -42,7 +43,7 @@ const checkTokenValidity = async (token, dispatch) => {
 };
 
 const isAuthenticated = async dispatch => {
-  return getTokenFromAsyncStorage().then(token =>
+  return getTokenFromAsyncStorage(dispatch).then(token =>
     checkTokenValidity(token, dispatch),
   );
 };
@@ -55,12 +56,15 @@ const Auth = props => {
 
   const onComponentLoad = async (setLoading, setAuthenticated) => {
     const authenticated = await isAuthenticated(dispatch);
+    console.log('going to register')
+    console.log(authenticated)
     setAuthenticated(!!authenticated);
     dispatch(setLoading(false));
   };
 
   const handleAuthenticated = async (setLoading, setAuthenticated, token) => {
-    storeData(token);
+    storeData(token, dispatch);
+    console.log(token)
     props.setToken(token);
     setAuthenticated(true);
     dispatch(setLoading(false));

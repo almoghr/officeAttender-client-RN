@@ -4,7 +4,7 @@ import {SET_TOKEN, SET_PROFILE} from '../constants/auth';
 import {PROFILE} from '../../graphql/queries';
 import {LOGIN, REGISTER, AUTHENTICATE_TOKEN} from '../../graphql/mutation';
 import {setToasterMessage} from './toaster'
-const client = gqlClient();
+
 
 export const setToken = token => async dispatch => {
   try {
@@ -18,14 +18,21 @@ export const setToken = token => async dispatch => {
 
 export const setProfile = () => async dispatch => {
   try {
+    const client = gqlClient();
+    console.log('this client is from the setProfile', client) 
     const result = await client.query({query: PROFILE});
+    
     dispatch({type: SET_PROFILE, payload: result.data.profile.employee});
     return result.data.profile.employee;
   } catch (e) {
+    console.log(e.message)
     dispatch(setToasterMessage('an error occured while trying to set profile'));
   }
 };
 
+export const getProfile = (profile) => async dispatch => {
+  dispatch({type: SET_PROFILE, payload: profile})
+}
 export const updateProfile = profile => async dispatch => {
   try {
     dispatch({type: SET_PROFILE, payload: profile});
@@ -34,13 +41,17 @@ export const updateProfile = profile => async dispatch => {
   }
 };
 
-export const signIn = (username, password) => async () => {
+export const signIn = (username, password) => async dispatch => {
   try {
+    const client = gqlClient();
+    console.log('this client is from the signIn', client) 
+
     const result = await client.mutate({
       mutation: LOGIN,
       variables: {username, password},
     });
-    setToken(result.data.tokenAuth.token);
+    dispatch({type: SET_TOKEN, payload: result.data.tokenAuth.token})
+    
     return result.data.tokenAuth.token;
   } catch (e) {
     dispatch(setToasterMessage('an error occured while trying to login'));
@@ -57,9 +68,10 @@ export const register = (
   address,
   isManagement = false,
   workspaceId,
-) => async () => {
+) => async dispatch => {
+  console.log('trying to get the data', username, password, email, name, occupation, occupationDescription, address, isManagement, workspaceId)
   try {
-    const result = await client.mutate({
+    const result = await gqlClient().mutate({
       mutation: REGISTER,
       variables: {
         username,
@@ -73,17 +85,21 @@ export const register = (
         workspaceId,
       },
     });
-    setToken(result.data.createEmployee.token);
-    setProfile(result.data.createEmployee.employee);
+    await gqlClient().mutate({mutation: LOGIN, variables:{
+      username, password
+    }})
+    dispatch({type: SET_TOKEN, payload: result.data.createEmployee.token})
+    getProfile(result.data.createEmployee.employee)
+    // dispatch({type: SET_PROFILE, payload: result.data.createEmployee.employee})
     return result.data.createEmployee.token;
   } catch (e) {
     dispatch(setToasterMessage('an error occured while trying to register'));
   }
-};
+}
 
-export const verifyToken = token => async () => {
+export const verifyToken = token => async dispatch => {
   try {
-    const result = await client.mutate({
+    const result = await gqlClient().mutate({
       mutation: AUTHENTICATE_TOKEN,
       variables: {token},
     });
